@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('author');
             $table->string('isbn')->unique();
             $table->boolean('status')->default(true);
+            $table->timestamps();
         });
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('loan_date');
             $table->date('return_date')->nullable();
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
