@@ -7,6 +7,7 @@ use App\Http\Requests\BookRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\Loan;
 
 class BookController extends Controller
 {
@@ -21,11 +22,43 @@ class BookController extends Controller
             // precisa criar o arquivo de request BookStoreRequest, da qual lida com as validações
             $data = $request->validated();
 
+            if ( $data ) {
+                $existingBook = Book::where('isbn', $data['isbn'])->first();
+                if ($existingBook) {
+                    return response()->json(['message' => 'Livro com este ISBN já existe'], 422);
+                }
+            } else {
+                return response()->json(['message' => 'Dados inválidos'], 422);
+            }
+
             $book = Book::create($data);
             return response()->json($book->toResource(), 201);
         } catch (\Exception $ex) {
             Log::error($ex->getMessage());
             return response()->json(['message' => 'Erro ao criar o livro'], 500);
+        }
+    }
+
+    public function borrowBook(Request $request, $id) {
+
+        try {
+            $book = Book::findOrFail($id);
+
+            if (!$book->status) {
+                return response()->json(['message' => 'livro indisponível para empréstimo'], 400);
+            };
+
+            $book->status = false;
+            $loan = new Loan();
+            $loan->book_id = $book->id;
+            $loan->borrower_name = $request->input('borrower_name');
+            $loan->loan_date = now();
+
+            $loan->save();
+            $book->save();
+            return response()->json(['message' => 'Livro emprestado com sucesso', 'data' => $loan, 'book' => $book], 200);
+        } catch (\Exception $ex) {
+            return response()->json(['message' => 'Erro ao emprestar o livro'], 500);
         }
     }
 }
