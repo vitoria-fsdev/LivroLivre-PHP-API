@@ -1,59 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+---
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+```markdown
+# 📚 LivroLivre API - Gerenciamento de Biblioteca
 
-## About Laravel
+Esta é uma API RESTful desenvolvida em **Laravel** para gerenciar livros e o fluxo de empréstimos e devoluções. O projeto utiliza as melhores práticas do framework, incluindo Resources, Form Requests e Factories.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ Tecnologias Utilizadas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* **PHP 8.2+**
+* **Laravel Framework**
+* **SQLite** (Banco de dados)
+* **Composer** (Gerenciador de dependências)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Instalação e Configuração
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Siga os passos abaixo para rodar o projeto localmente no seu sistema (ex: Pop!_OS):
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
+### 1. Clonar o repositório
 
-## Laravel Sponsors
+```bash
+git clone [https://github.com/vitoria-fsdev/PHP-ApiRestFul.git](https://github.com/vitoria-fsdev/PHP-ApiRestFul.git)
+cd PHP-ApiRestFul
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
 
-### Premium Partners
+### 2. Instalar dependências
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+composer install
 
-## Contributing
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Configurar ambiente
 
-## Code of Conduct
+```bash
+cp .env.example .env
+php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
 
-## Security Vulnerabilities
+*Certifique-se de que o `DB_CONNECTION` no seu `.env` está configurado para `sqlite`.*
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Migrações e Dados Fictícios (Seeding)
 
-## License
+Para criar as tabelas e já popular a biblioteca com dados de teste:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan migrate:fresh --seed
+
+```
+
+### 5. Rodar o servidor
+
+```bash
+php artisan serve
+
+```
+
+A API estará disponível em: `http://localhost:8000/api`
+
+---
+
+### Endpoints do projeto
+
+| Método | Endpoint | Descrição |
+| --- | --- | --- |
+| **GET** | `/api/books` | Lista todos os livros cadastrados. |
+| **POST** | `/api/books` | Cadastra um novo livro (Requer validação). |
+| **POST** | `/api/books/{id}/borrow` | Realiza o empréstimo de um livro para um usuário. |
+| **POST** | `/api/books/{id}/return` | Realiza a devolução e libera o livro no estoque. |
+
+---
+
+## 🧠 O que foi aplicado neste projeto?
+
+* **ORM Eloquent:** Gerenciamento de dados e relacionamentos.
+* **API Resources:** Formatação padronizada das respostas JSON.
+* **Form Requests:** Validação de dados isolada da lógica de negócio.
+* **Artisan CLI:** Automação de criação de arquivos e gestão de banco.
+* **Mass Assignment:** Proteção de colunas com `$fillable`.
+* **Try/Catch & Logging:** Tratamento de erros robusto.
+
+---
+
+## 👩‍💻 Autora
+
+**Maria Vitória** - *Desenvolvedora em treinamento*
+
+* [GitHub](https://www.google.com/search?q=https://github.com/vitoria-fsdev)
+
+```
