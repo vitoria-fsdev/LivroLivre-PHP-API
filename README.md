@@ -88,6 +88,6 @@ A API estará disponível em: `http://localhost:8000/api`
 
 **Maria Vitória** - *Desenvolvedora em treinamento*
 
-* [GitHub](https://www.google.com/search?q=https://github.com/vitoria-fsdev)
+* [GitHub](https://github.com/vitoria-fsdev)
 
 ```
