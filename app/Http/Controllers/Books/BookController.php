@@ -61,4 +61,28 @@ class BookController extends Controller
             return response()->json(['message' => 'Erro ao emprestar o livro'], 500);
         }
     }
+
+    public function returnBook(Request $request, $id) {
+        try {
+            $book = Book::findOrFail($id);
+
+            if ($book->status) {
+                return response()->json(['message' => 'Livro já está disponível na biblioteca'], 400);
+            }
+
+            $book->status = true;
+            $loan = Loan::where('book_id', $book->id)->whereNull('return_date')->first();
+
+            if (!$loan) {
+                return response()->json(['message' => 'Nenhum empréstimo ativo encontrado para este livro'], 404);
+            }
+            
+            $loan->return_date = now();
+            $loan->save();
+            $book->save();
+            return response()->json(['message' => 'Livro devolvido com sucesso', 'data' => $loan, 'book' => $book], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Erro ao devolver o livro'], 500);
+        }
+    }
 }
