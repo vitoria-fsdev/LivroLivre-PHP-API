@@ -1,5 +1,3 @@
----
-
 ```markdown
 # 📚 LivroLivre API - Gerenciamento de Biblioteca
 
