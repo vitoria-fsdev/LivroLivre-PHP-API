@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Books;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRequest;
+use App\Http\Resources\borrowAndReturnResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -56,7 +57,7 @@ class BookController extends Controller
 
             $loan->save();
             $book->save();
-            return response()->json(['message' => 'Livro emprestado com sucesso', 'data' => $loan, 'book' => $book], 200);
+            return response()->json(['message' => 'Livro emprestado com sucesso', 'data' => new borrowAndReturnResource($loan)], 200);
         } catch (\Exception $ex) {
             return response()->json(['message' => 'Erro ao emprestar o livro'], 500);
         }
@@ -80,7 +81,7 @@ class BookController extends Controller
             $loan->return_date = now();
             $loan->save();
             $book->save();
-            return response()->json(['message' => 'Livro devolvido com sucesso', 'data' => $loan, 'book' => $book], 200);
+            return response()->json(['message' => 'Livro devolvido com sucesso', 'data' => new borrowAndReturnResource($loan)], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Erro ao devolver o livro'], 500);
         }
