@@ -1,5 +1,5 @@
 # 1. Imagem base com PHP e Apache
-FROM --platform=$BUILDPLATFORM php:8.2-apache
+FROM --platform=$BUILDPLATFORM php:8.4-apache
 
 # 2. Instalar dependências do sistema e extensões PHP para o Laravel
 RUN apt-get update && apt-get install -y \
@@ -28,6 +28,7 @@ COPY . /var/www/html
 
 # 6. Instalar o Composer (gerenciador de dependências)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN git config --global --add safe.directory /var/www/html
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
 # 7. Dar permissão para as pastas de cache e storage do Laravel
