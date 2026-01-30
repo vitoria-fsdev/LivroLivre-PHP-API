@@ -1,8 +1,9 @@
-# 1. Imagem base com PHP e Apache
+# 1. Imagem base (Mantive a 8.4 que você está usando)
 FROM --platform=$BUILDPLATFORM php:8.4-apache
 
-# 2. Instalar dependências do sistema e extensões PHP para o Laravel
+# 2. Instalar dependências (Adicionado libpq-dev para o Postgres)
 RUN apt-get update && apt-get install -y \
+    libpq-dev \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -11,28 +12,30 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
-# Limpar cache do apt para a imagem ficar leve
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensões do PHP (essencial para o CRUD e Banco de Dados)
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+# 3. Instalar extensões (Trocado pdo_mysql por pdo_pgsql)
+RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd
 
-# 3. Habilitar o mod_rewrite do Apache (necessário para as rotas do Laravel)
+# 4. Habilitar mod_rewrite
 RUN a2enmod rewrite
 
-# 4. Definir a pasta de trabalho
+# 5. Configuração do Apache para apontar para a pasta /public do Laravel
+# (O Laravel precisa que o Apache olhe para a pasta public, não para a raiz)
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
 WORKDIR /var/www/html
 
-# 5. Copiar os arquivos do projeto para o container
 COPY . /var/www/html
 
-# 6. Instalar o Composer (gerenciador de dependências)
+# 6. Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN git config --global --add safe.directory /var/www/html
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+RUN composer install --no-interaction --optimize-autoloader
 
-# 7. Dar permissão para as pastas de cache e storage do Laravel
+# 7. Permissões
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# 8. Expor a porta 80 (padrão do Apache)
 EXPOSE 80
