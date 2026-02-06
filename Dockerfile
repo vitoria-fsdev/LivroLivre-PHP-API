@@ -1,4 +1,4 @@
-# 1. Imagem base (Mantive a 8.4 que você está usando)
+# 1. Imagem base 
 FROM --platform=$BUILDPLATFORM php:8.4-apache
 
 # 2. Instalar dependências (Adicionado libpq-dev para o Postgres)
