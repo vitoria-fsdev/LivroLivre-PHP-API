@@ -1,22 +1,22 @@
 ```markdown
 # 📚 LivroLivre API - Gerenciamento de Biblioteca
 
-Esta é uma API RESTful desenvolvida em **Laravel** para gerenciar livros e o fluxo de empréstimos e devoluções. O projeto utiliza as melhores práticas do framework, incluindo Resources, Form Requests e Factories.
+Esta é uma API RESTful desenvolvida em **Laravel** para gerenciar livros e o fluxo de empréstimos e devoluções. O projeto foi atualizado para rodar em um ambiente de contêineres, garantindo que o banco de dados e o servidor sejam idênticos em qualquer máquina.
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **PHP 8.2+**
+* **PHP 8.3**
 * **Laravel Framework**
-* **SQLite** (Banco de dados)
+* **PostgreSQL** (Banco de dados principal)
+* **Docker & Laravel Sail** (Ambiente de desenvolvimento)
 * **Composer** (Gerenciador de dependências)
 
 ---
 
-## 🚀 Instalação e Configuração
+## 🚀 Instalação e Configuração (com Docker/Sail)
 
-Siga os passos abaixo para rodar o projeto localmente no seu sistema (ex: Pop!_OS):
+Siga os passos abaixo para rodar o projeto utilizando o ambiente Docker:
 
-```
 ### 1. Clonar o repositório
 
 ```bash
@@ -25,7 +25,9 @@ cd PHP-ApiRestFul
 
 ```
 
-### 2. Instalar dependências
+### 2. Instalar dependências locais
+
+Como o projeto usa o Sail, primeiro instalamos as dependências para gerar a pasta `vendor`:
 
 ```bash
 composer install
@@ -34,53 +36,68 @@ composer install
 
 ### 3. Configurar ambiente
 
+Copie o arquivo de exemplo e ajuste as portas se necessário (o padrão está configurado para a porta **8080** para evitar conflitos no Linux/Pop!_OS):
+
 ```bash
 cp .env.example .env
-php artisan key:generate
 
 ```
 
-*Certifique-se de que o `DB_CONNECTION` no seu `.env` está configurado para `sqlite`.*
+### 4. Subir os Contêineres
 
-### 4. Migrações e Dados Fictícios (Seeding)
-
-Para criar as tabelas e já popular a biblioteca com dados de teste:
+Agora, inicie o servidor e o banco de dados PostgreSQL:
 
 ```bash
-php artisan migrate:fresh --seed
+./vendor/bin/sail up -d
 
 ```
 
-### 5. Rodar o servidor
+> **Dica:** Se você configurou o alias no seu `~/.bashrc`, pode usar apenas `sail up -d`.
+
+### 5. Migrações e Chaves
+
+Com o Docker rodando, prepare o banco de dados:
 
 ```bash
-php artisan serve
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate --seed
 
 ```
 
-A API estará disponível em: `http://localhost:8000/api`
+A API estará disponível em: `http://localhost:8080/api`
 
 ---
 
-### Endpoints do projeto
+## 🐳 Comandos Úteis do Docker/Sail
+
+| Comando | Descrição |
+| --- | --- |
+| `sail up -d` | Sobe os contêineres em segundo plano. |
+| `sail stop` | Para os contêineres sem removê-los. |
+| `sail down` | Para e remove os contêineres e redes. |
+| `sail artisan {comando}` | Executa comandos do Artisan dentro do Docker. |
+| `sail logs -f` | Acompanha os logs em tempo real. |
+
+---
+
+## 🧠 Arquitetura e Funcionalidades
+
+* **Ambiente Dockerizado:** Isolamento total com PostgreSQL e PHP-FPM via Sail.
+* **API Resources:** Transformação de dados para respostas JSON consistentes.
+* **PostgreSQL:** Utilização de um banco de dados relacional robusto para gerenciar livros e empréstimos.
+* **Relacionamentos Eloquent:** Vínculo entre livros e registros de empréstimo.
+* **Form Requests:** Validações customizadas para garantir integridade nos dados dos livros.
+
+---
+
+### Endpoints da API
 
 | Método | Endpoint | Descrição |
 | --- | --- | --- |
-| **GET** | `/api/books` | Lista todos os livros cadastrados. |
-| **POST** | `/api/books` | Cadastra um novo livro (Requer validação). |
-| **POST** | `/api/books/{id}/borrow` | Realiza o empréstimo de um livro para um usuário. |
-| **POST** | `/api/books/{id}/return` | Realiza a devolução e libera o livro no estoque. |
-
----
-
-## 🧠 O que foi aplicado neste projeto?
-
-* **ORM Eloquent:** Gerenciamento de dados e relacionamentos.
-* **API Resources:** Formatação padronizada das respostas JSON.
-* **Form Requests:** Validação de dados isolada da lógica de negócio.
-* **Artisan CLI:** Automação de criação de arquivos e gestão de banco.
-* **Mass Assignment:** Proteção de colunas com `$fillable`.
-* **Try/Catch & Logging:** Tratamento de erros robusto.
+| **GET** | `/api/books` | Lista todos os livros. |
+| **POST** | `/api/books` | Cadastra um novo livro. |
+| **POST** | `/api/books/{id}/borrow` | Realiza o empréstimo de um livro. |
+| **POST** | `/api/books/{id}/return` | Realiza a devolução de um livro. |
 
 ---
 
@@ -88,4 +105,13 @@ A API estará disponível em: `http://localhost:8000/api`
 
 **Maria Vitória** - *Desenvolvedora em treinamento*
 
-* https://github.com/vitoria-fsdev
+* [GitHub](https://github.com/vitoria-fsdev)
+* [LinkedIn](https://www.google.com/search?q=https://www.linkedin.com/in/seu-perfil)
+
+```
+
+
+
+**Gostaria que eu criasse uma descrição de projeto bem chamativa para você colocar no seu perfil do LinkedIn sobre esse sistema de biblioteca?**
+
+```
