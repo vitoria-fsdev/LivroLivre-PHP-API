@@ -106,12 +106,6 @@ A API estará disponível em: `http://localhost:8080/api`
 **Maria Vitória** - *Desenvolvedora em treinamento*
 
 * [GitHub](https://github.com/vitoria-fsdev)
-* [LinkedIn](https://www.google.com/search?q=https://www.linkedin.com/in/seu-perfil)
-
-```
-
-
-
-**Gostaria que eu criasse uma descrição de projeto bem chamativa para você colocar no seu perfil do LinkedIn sobre esse sistema de biblioteca?**
+* [LinkedIn](https://www.linkedin.com/in/vitoria-fsdev)
 
 ```
